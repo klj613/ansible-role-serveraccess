@@ -1,0 +1,30 @@
+---
+
+- name: Create user
+  user: name={{ item.key }}
+        home=/home/{{ item.key }}
+        shell=/bin/bash
+        state=present
+  with_dict: server_access_granted_users
+
+- name: Add root access
+  template:
+    src=sudo.j2
+    dest=/etc/sudoers.d/{{ item.key }}_ALL
+    owner=root group=root mode=0440
+  when: '"{{ item.value.root }}" == "True"'
+  with_dict: server_access_granted_users
+
+- name: Create users .ssh folder
+  file: path=/home/{{ item.key }}/.ssh
+        owner={{ item.key }}
+        mode=0700
+        state=directory
+  with_dict: server_access_granted_users
+
+- name: Ensure authorized_keys file exists
+  file: path=/home/{{ item.key }}/.ssh/authorized_keys
+        owner={{ item.key }}
+        mode=0600
+        state=touch
+  with_dict: server_access_granted_users

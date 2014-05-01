@@ -1,0 +1,11 @@
+---
+
+- name: Install sudo
+  yum: name=sudo state=installed
+
+- include: granted_users.yml
+- include: granted_keys.yml
+
+- include: revoked_users.yml
+- include: revoked_keys.yml
+

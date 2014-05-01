@@ -1,0 +1,12 @@
+---
+
+- name: Remove user
+  user: name={{ item }}
+        state=absent
+        remove=true
+  with_items: server_access_revoked_users
+
+- name: Remove root access
+  file: path=/etc/sudoers.d/{{ item }}_ALL
+        state=absent
+  with_items: server_access_revoked_users

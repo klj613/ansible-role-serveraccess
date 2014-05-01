@@ -1,0 +1,7 @@
+---
+
+- name: Add user pub keys
+  lineinfile:
+    dest=/home/{{ item.key }}/.ssh/authorized_keys
+    line={{ item.value }}
+  with_dict: server_access_granted_keys

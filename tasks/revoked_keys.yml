@@ -1,0 +1,8 @@
+---
+
+- name: Remove user revoked pub keys
+  lineinfile:
+    dest=/home/{{ item.key }}/.ssh/authorized_keys
+    line={{ item.value }}
+    state=absent
+  with_dict: server_access_revoked_keys
